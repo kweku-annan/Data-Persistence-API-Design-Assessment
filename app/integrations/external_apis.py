@@ -103,7 +103,7 @@ async def fetch_profile_data(name: str) -> ExternalProfileData:
 
     return ExternalProfileData(
         gender=gender_data["gender"],
-        gender_probability=gender_data["gender_probability"],
+        gender_probability=gender_data["probability"],
         sample_size=gender_data["count"],
         age=age,
         age_group=_classify_age_group(age),
