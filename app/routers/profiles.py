@@ -1,6 +1,6 @@
 from typing import Optional
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, Response
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 # from starlette import status
@@ -74,3 +74,4 @@ def handle_delete_profile(
         db: Session = Depends(get_db),
 ):
     delete_profile(profile_id, db)
+    return Response(status_code=204)
