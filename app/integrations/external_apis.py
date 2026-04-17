@@ -72,6 +72,11 @@ async def _fetch_nationality(client: httpx.AsyncClient, name: str) -> dict:
         response = await client.get(NATIONALIZE_URL, params={"name": name})
         response.raise_for_status()
         data = response.json()
+        if not data.get("country") or len(data["country"]) == 0:
+            raise HTTPException(status_code=502, detail={
+                "status": "error",
+                "message": "Nationalize returned an invalid response"
+            })
     except httpx.HTTPError:
         raise HTTPException(status_code=502, detail={
             "status": "error",
@@ -83,7 +88,7 @@ async def _fetch_nationality(client: httpx.AsyncClient, name: str) -> dict:
 async def fetch_profile_data(name: str) -> ExternalProfileData:
     async with httpx.AsyncClient(timeout=10.0) as client:
         gender_data, age_data, nationality_data = await asyncio.gather(
-            _fetch_age(client, name),
+            _fetch_gender(client, name),
             _fetch_age(client, name),
             _fetch_nationality(client, name)
         )
